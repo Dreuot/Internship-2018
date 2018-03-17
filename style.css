@@ -5,6 +5,7 @@
     margin-top: 30px;
     vertical-align: top;
     padding: 5px;
+    position: relative;
     background-color: rgba(255, 255, 255, 0.644);
 }
 
@@ -16,6 +17,31 @@ body{
 .skills-container{
     margin-left: 20px;
     width: 80%;
+}
+
+.circle{
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    background-color: rgba(255, 241, 42, 0.623);
+    position: relative; 
+}
+
+.circles{
+    float: left;
+    margin-right: 20px;
+}
+
+.circle2{
+    top: -75px;
+}
+
+.yellow-block{
+    display: inline-block;
+    width: 30px;
+    height: 15px;
+    background-color: rgb(250, 237, 57);
+    margin-right: 15px;
 }
 
 .skill-bar{
@@ -66,6 +92,37 @@ body{
 
 .completed4{
     width: 50%;
+}
+
+.awards{
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.award{
+    position: relative;
+    display: inline-block;
+    margin-right: 20px;
+    min-height: 150px;
+    width: 25%;
+    background-color:rgb(255, 238, 5);
+    margin-bottom: 20px;
+    text-align: center;
+    vertical-align: top;
+}
+
+.middle{
+    margin-top: 60px;
+    display: inline-block;
+}
+
+.mark{
+    position: absolute;
+    right: 2px;
+    width: 15px;
+    height: 25px;
+    background-color: black;
 }
 
 h1{
