@@ -6,6 +6,6 @@
 
 [Google](https://www.google.ru/)
 
-[X] task1
-[] task2
-[x] task3
+- [x] task1
+- [] task2
+- [x] task3
