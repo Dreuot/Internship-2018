@@ -7,5 +7,5 @@
 [Google](https://www.google.ru/)
 
 - [x] task1
-- [] task2
+- [ ] task2
 - [x] task3
