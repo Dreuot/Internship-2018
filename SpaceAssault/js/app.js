@@ -160,8 +160,12 @@ function updateEntities(dt) {
     }
 
     // Update all the enemies
-    for(var i=0; i<enemies.length; i++) {
-        enemies[i].pos[0] -= enemySpeed * dt;
+    for(var i=0; i<enemies.length; i++) {        
+        if( enemies[i].dir === 'horizontal')
+            enemies[i].pos[0] -= enemySpeed * dt;
+        else
+            enemies[i].pos[1] -= enemySpeed * dt;
+            
         enemies[i].sprite.update(dt);
 
         // Remove if offscreen
@@ -218,6 +222,30 @@ function checkCollisions() {
 
         if(boxCollides(pos, size, player.pos, player.sprite.size)) {
             gameOver();
+        }
+    }
+
+    // обход мегалитов
+    for(var i=0; i<enemies.length; i++) {
+        var pos = enemies[i].pos;
+        var size = enemies[i].sprite.size;
+        var collided = false;
+
+        for(var j=0; j<megalits.length; j++) {
+            var pos2 = [];
+            pos2[0] = megalits[j].pos[0];
+            pos2[1] = megalits[j].pos[1];
+            var size2 = megalits[j].sprite.size;
+
+            if(boxCollides(pos, size, pos2, size2))
+                collided = true;
+        }
+        
+        if(collided) {
+            enemies[i].dir = 'vertical';
+        }
+        else{
+            enemies[i].dir = 'horizontal';
         }
     }
 
