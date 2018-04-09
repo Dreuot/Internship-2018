@@ -46,7 +46,8 @@ function init() {
 
 resources.load([
     'img/sprites.png',
-    'img/terrain.png'
+    'img/terrain.png',
+    'img/sprites_02.png'
 ]);
 resources.onReady(init);
 
@@ -59,6 +60,8 @@ var player = {
 var bullets = [];
 var enemies = [];
 var explosions = [];
+var megalits = [];
+var mana = [];
 
 var lastFire = Date.now();
 var gameTime = 0;
@@ -268,6 +271,7 @@ function render() {
     renderEntities(bullets);
     renderEntities(enemies);
     renderEntities(explosions);
+    renderEntities(megalits);
 };
 
 function renderEntities(list) {
@@ -300,6 +304,24 @@ function reset() {
 
     enemies = [];
     bullets = [];
+
+    megalits.push({
+        pos: [50, 50],
+        sprite: new Sprite('img/sprites_02.png', [0, 200], [60, 65],
+                           0, [0])
+    });
+
+    megalits.push({
+        pos: [330, 210],
+        sprite: new Sprite('img/sprites_02.png', [0, 200], [60, 65],
+                           0, [0])
+    });
+
+    megalits.push({
+        pos: [187, 390],
+        sprite: new Sprite('img/sprites_02.png', [0, 270], [50, 50],
+                           0, [0])
+    });
 
     player.pos = [50, canvas.height / 2];
 };
