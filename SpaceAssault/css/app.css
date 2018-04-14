@@ -27,10 +27,14 @@ canvas {
     color: #757575;
 }
 
-#score {
+#score, #manas{
     float: right;
     color: white;
     font-size: 2em;
+}
+
+.clearfix{
+    clear: both;
 }
 
 .key {
