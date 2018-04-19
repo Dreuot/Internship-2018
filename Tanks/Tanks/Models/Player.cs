@@ -11,7 +11,7 @@ namespace Tanks.Models
     {
         private Shooter shooter;
 
-        public Player(string sprite, int speed = 0, Point position = default, Direction direction = Direction.None) : base(sprite, speed, position, direction)
+        public Player(string sprite = @"Assets/player.png", int speed = 0, PointF position = default, Direction direction = Direction.None) : base(sprite, speed, position, direction)
         {
             shooter = new Shooter();
         }

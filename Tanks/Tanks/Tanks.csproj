@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Contollers\GameController.cs" />
     <Compile Include="Direction.cs" />
     <Compile Include="GameForm.cs">
       <SubType>Form</SubType>
@@ -54,6 +55,7 @@
     <Compile Include="GameForm.Designer.cs">
       <DependentUpon>GameForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\Apple.cs" />
     <Compile Include="Models\Bullet.cs" />
     <Compile Include="Models\GameObject.cs" />
     <Compile Include="Models\IShooter.cs" />
@@ -61,6 +63,7 @@
     <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\Shooter.cs" />
     <Compile Include="Models\Tank.cs" />
+    <Compile Include="Models\Wall.cs" />
     <Compile Include="ParamsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -99,8 +102,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets\" />
-    <Folder Include="Contollers\" />
     <Folder Include="Views\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy $(ProjectDir)Assets $(TargetDir)Assets /I /R /Y</PostBuildEvent>
+  </PropertyGroup>
 </Project>
