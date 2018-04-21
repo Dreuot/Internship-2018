@@ -18,6 +18,8 @@ namespace Tanks.Contollers
         private DateTime lastUpdate;
         Random r = new Random();
 
+        public Player Player => player;
+
         public GameController(Settings s)
         {
             settings = s;
@@ -62,6 +64,82 @@ namespace Tanks.Contollers
         {
             foreach (var tank in tanks)
                 tank.Update();
+
+            player.Update();
+
+            CheckPlayerBound();
+            CheckObjectBound();
+            ChangeDirecion();
+        }
+
+        private void CheckPlayerBound()
+        {
+            PointF p = Player.Position;
+            if (p.X < 0)
+            {
+                p.X = 0;
+            }
+
+            if (p.X + Player.Width > settings.Width)
+            {
+                p.X = settings.Width - Player.Width;
+            }
+
+            if (p.Y < 0)
+            {
+                p.Y = 0;
+            }
+
+            if (p.Y + Player.Height > settings.Height)
+            {
+                p.Y = settings.Height - Player.Height;
+            }
+
+            Player.Position = p;
+        }
+
+        private void CheckObjectBound()
+        {
+            foreach (var tank in tanks)
+            {
+                PointF p = tank.Position;
+                if (p.X < 0)
+                {
+                    p.X = 0;
+                    tank.Direction = Direction.Right;
+                }
+
+                if (p.X + tank.Width > settings.Width)
+                { 
+                    p.X = settings.Width - tank.Width;
+                    tank.Direction = Direction.Left;
+                }
+
+                if (p.Y < 0)
+                {
+                    p.Y = 0;
+                    tank.Direction = Direction.Down;
+                }
+
+                if (p.Y + tank.Height > settings.Height)
+                {
+                    p.Y = settings.Height - tank.Height;
+                    tank.Direction = Direction.Up;
+                }
+
+                tank.Position = p;
+            }
+        }
+
+        private void ChangeDirecion()
+        {
+            foreach (var tank in tanks)
+            {
+                TimeSpan dt = DateTime.Now - tank.LastTurn;
+
+                if (r.Next(0, 100) > 90 && dt.Seconds > 1)
+                    tank.Direction = (Direction)r.Next(1, 5);
+            }
         }
 
         private PointF RandomPosition(Size size)

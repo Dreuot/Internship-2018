@@ -9,20 +9,38 @@ namespace Tanks.Models
 {
     abstract class GameObject
     {
-        private int speed;
+        //private int speed;
+        private Direction direction;
+        private Bitmap upDirectionSprite;
+        private DateTime lastUpdate { get; set; }
 
-        public Bitmap Sprite { get; }
+        public Bitmap Sprite { get; private set; }
         public int Width => Sprite.Width;
         public int Height => Sprite.Height;
         public double Speed { get; set; }
-        public Direction Direction { get; set; }
-        public PointF Position { get; set; }
 
-        private DateTime lastUpdate { get; set; }
+        public Direction Direction
+        {
+            get
+            {
+                return direction;
+            }
+            set
+            {
+                direction = value;
+                LastTurn = DateTime.Now;
+                Sprite = RotateSprite(value);
+            }
+        }
+
+        public PointF Position { get; set; }
+        public DateTime LastUpdate => lastUpdate;
+        public DateTime LastTurn { get; private set; }
 
         public GameObject(string sprite, int speed = 0, PointF position = default, Direction direction = Direction.None)
         {
             Sprite = new Bitmap(sprite);
+            upDirectionSprite = new Bitmap(sprite);
             Speed = speed;
             Position = position;
         }
@@ -47,16 +65,16 @@ namespace Tanks.Models
             switch (Direction)
             {
                 case Direction.Up:
-                    p.Y -= speed * dt.Seconds;
+                    p.Y -= (float)Speed * dt.Milliseconds / 1000;
                     break;
                 case Direction.Down:
-                    p.Y += speed * dt.Seconds;
+                    p.Y += (float)Speed * dt.Milliseconds / 1000;
                     break;
                 case Direction.Left:
-                    p.X -= speed * dt.Seconds;
+                    p.X -= (float)Speed * dt.Milliseconds / 1000;
                     break;
                 case Direction.Right:
-                    p.X += speed * dt.Seconds;
+                    p.X += (float)Speed * dt.Milliseconds / 1000;
                     break;
                 default:
                     break;
@@ -64,6 +82,29 @@ namespace Tanks.Models
 
             Position = p;
             lastUpdate = DateTime.Now;
+        }
+
+        private Bitmap RotateSprite(Direction direction)
+        {
+            Bitmap newSprite = new Bitmap(upDirectionSprite);
+            switch (Direction)
+            {
+                case Direction.Up:
+                    break;
+                case Direction.Down:
+                    newSprite.RotateFlip(RotateFlipType.Rotate180FlipNone);
+                    break;
+                case Direction.Left:
+                    newSprite.RotateFlip(RotateFlipType.Rotate270FlipNone);
+                    break;
+                case Direction.Right:
+                    newSprite.RotateFlip(RotateFlipType.Rotate90FlipNone);
+                    break;
+                default:
+                    break;
+            }
+
+            return newSprite;
         }
     }
 }

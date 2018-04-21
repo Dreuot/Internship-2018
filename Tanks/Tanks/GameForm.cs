@@ -53,6 +53,7 @@ namespace Tanks
 
                 gc = new GameController(sett);
                 pictureBox1.Image = new Bitmap(pictureBox1.Size.Width, pictureBox1.Size.Height);
+                this.KeyPreview = true;
             };
 
             param.Show();
@@ -60,12 +61,7 @@ namespace Tanks
 
         private void StartGame()
         {
-            while(true)
-            {
-                gc.Update();
-                pictureBox1.Image = gc.Render((Bitmap)pictureBox1.Image);
-                Thread.Sleep(60/1000);
-            }
+
         }
 
         private void GameForm_Shown(object sender, EventArgs e)
@@ -78,9 +74,47 @@ namespace Tanks
             g.FillRectangle(Brushes.Black, new Rectangle(0, 0, pictureBox1.Width, pictureBox1.Height));
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private async void button1_Click(object sender, EventArgs e)
         {
+            timer1.Tick += Render;
+            timer1.Interval = 1000 / 100;
+            timer1.Start();
+        }
+
+        private void Render(object sender, EventArgs e)
+        {
+            gc.Update();
             pictureBox1.Image = gc.Render((Bitmap)pictureBox1.Image);
+        }
+
+        private void GameForm_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            PlayerDirection(e);
+        }
+
+        private void PlayerDirection(KeyPressEventArgs e)
+        {
+            switch (e.KeyChar)
+            {
+                case 'w':
+                case 'ц':
+                    gc.Player.Direction = Direction.Up;
+                    break;
+                case 'ф':
+                case 'a':
+                    gc.Player.Direction = Direction.Left;
+                    break;
+                case 'ы':
+                case 's':
+                    gc.Player.Direction = Direction.Down;
+                    break;
+                case 'в':
+                case 'd':
+                    gc.Player.Direction = Direction.Right;
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
