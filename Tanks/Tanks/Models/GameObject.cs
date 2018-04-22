@@ -43,6 +43,7 @@ namespace Tanks.Models
             upDirectionSprite = new Bitmap(sprite);
             Speed = speed;
             Position = position;
+            lastUpdate = DateTime.Now;
         }
 
         public void Render(Graphics g)
@@ -52,10 +53,10 @@ namespace Tanks.Models
 
         public bool Collides(GameObject obj)
         {
-            bool collide = false;
-
-
-            return collide;
+            return !((Position.X + Width <= obj.Position.X)
+                || (Position.X > obj.Position.X + obj.Width)
+                || (Position.Y + Height <= obj.Position.Y)
+                || (Position.Y > obj.Position.Y + obj.Height));
         }
 
         public void Update()

@@ -59,11 +59,6 @@ namespace Tanks
             param.Show();
         }
 
-        private void StartGame()
-        {
-
-        }
-
         private void GameForm_Shown(object sender, EventArgs e)
         {
             Hide();
@@ -74,11 +69,12 @@ namespace Tanks
             g.FillRectangle(Brushes.Black, new Rectangle(0, 0, pictureBox1.Width, pictureBox1.Height));
         }
 
-        private async void button1_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
             timer1.Tick += Render;
             timer1.Interval = 1000 / 100;
             timer1.Start();
+            gc.OnScoreChange += (score) => this.label1.Text = score.ToString();
         }
 
         private void Render(object sender, EventArgs e)
@@ -89,10 +85,10 @@ namespace Tanks
 
         private void GameForm_KeyPress(object sender, KeyPressEventArgs e)
         {
-            PlayerDirection(e);
+            KeyCatch(e);
         }
 
-        private void PlayerDirection(KeyPressEventArgs e)
+        private void KeyCatch(KeyPressEventArgs e)
         {
             switch (e.KeyChar)
             {
@@ -111,6 +107,10 @@ namespace Tanks
                 case 'в':
                 case 'd':
                     gc.Player.Direction = Direction.Right;
+                    break;
+                case 'r':
+                case ' ':
+                    gc.PlayerShoot();
                     break;
                 default:
                     break;
