@@ -34,26 +34,29 @@ namespace Tanks.Contollers
         }
 
         public event Action<int> OnScoreChange;
+        public event Action OnGameOver;
 
         public Player Player => player;
 
         public GameController(Settings s)
         {
             settings = s;
-            tanks = new List<Tank>(s.EnemyCount);
-            apples = new List<Apple>(settings.AppleCount);
-            bullets = new List<Bullet>();
-            enemyBullets = new List<Bullet>();
-
-            player = new Player() { Position = new PointF(0, 0), Direction = Direction.Up, Speed = settings.Speed};
-            lastUpdate = DateTime.Now;
             OnScoreChange += (x) => { };
+            OnGameOver += () => { };
 
             Reset();
         }
 
         public void Reset()
         {
+            tanks = new List<Tank>(settings.EnemyCount);
+            apples = new List<Apple>(settings.AppleCount);
+            bullets = new List<Bullet>();
+            enemyBullets = new List<Bullet>();
+
+            player = new Player() { Position = new PointF(0, 0), Direction = Direction.Up, Speed = settings.Speed };
+            lastUpdate = DateTime.Now;
+
             for (int i = 0; i < settings.EnemyCount; i++)
             {
                 Tank tank = new Tank();
@@ -102,6 +105,12 @@ namespace Tanks.Contollers
             foreach (var b in enemyBullets)
             {
                 b.Update();
+                if (b.Collides(player))
+                {
+                    player.Speed = 0;
+                    OnGameOver();
+                }
+            
             }
 
             foreach (var tank in tanks)
@@ -121,13 +130,14 @@ namespace Tanks.Contollers
                 }
             }
 
-            player.Update();
+            player?.Update();
 
             AddApple();
 
             CheckPlayerBound();
-            CheckObjectBound();
+            CheckTanksBound();
             ChangeDirecion();
+            CheckBulletBound();
         }
 
         private void CheckPlayerBound()
@@ -167,9 +177,19 @@ namespace Tanks.Contollers
                     i--;
                 }
             }
+
+            for (int i = 0; i < enemyBullets.Count; i++)
+            {
+                PointF p = enemyBullets[i].Position;
+                if ((p.X < 0) || (p.X + enemyBullets[i].Width > settings.Width) || (p.Y < 0) || (p.Y + enemyBullets[i].Height > settings.Height))
+                {
+                    enemyBullets.Remove(enemyBullets[i]);
+                    i--;
+                }
+            }
         }
 
-        private void CheckObjectBound()
+        private void CheckTanksBound()
         {
             foreach (var tank in tanks)
             {

@@ -10,6 +10,12 @@ namespace Tanks.Models
     abstract class GameObject
     {
         //private int speed;
+        private Bitmap l_s;
+        private Bitmap r_s;
+        private Bitmap u_s;
+        private Bitmap d_s;
+
+
         private Direction direction;
         private Bitmap upDirectionSprite;
         private DateTime lastUpdate { get; set; }

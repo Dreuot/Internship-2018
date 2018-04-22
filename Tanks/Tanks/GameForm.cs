@@ -54,6 +54,16 @@ namespace Tanks
                 gc = new GameController(sett);
                 pictureBox1.Image = new Bitmap(pictureBox1.Size.Width, pictureBox1.Size.Height);
                 this.KeyPreview = true;
+                gc.OnScoreChange += (score) => this.label1.Text = score.ToString();
+                gc.OnGameOver += () =>
+                {
+                    timer1.Stop();
+                    if(MessageBox.Show("Вы проиграли!\nПовторить?", "Игра закончена", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    {
+                        gc.Reset();
+                        timer1.Start();
+                    }
+                };
             };
 
             param.Show();
@@ -74,7 +84,6 @@ namespace Tanks
             timer1.Tick += Render;
             timer1.Interval = 1000 / 100;
             timer1.Start();
-            gc.OnScoreChange += (score) => this.label1.Text = score.ToString();
         }
 
         private void Render(object sender, EventArgs e)
