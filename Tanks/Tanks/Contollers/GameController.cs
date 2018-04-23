@@ -15,6 +15,7 @@ namespace Tanks.Contollers
         private List<Bullet> bullets;
         private List<Bullet> enemyBullets;
         private List<Apple> apples;
+        private List<Wall> walls;
         private Player player;
         private DateTime lastUpdate;
         Random r = new Random();
@@ -43,6 +44,7 @@ namespace Tanks.Contollers
             tanks = new List<Tank>(s.EnemyCount);
             apples = new List<Apple>(settings.AppleCount);
             bullets = new List<Bullet>();
+            walls = Wall.CreateWalls(new Size(settings.Width, settings.Height));
             enemyBullets = new List<Bullet>();
 
             player = new Player() { Position = new PointF(0, 0), Direction = Direction.Up, Speed = settings.Speed};
@@ -242,6 +244,9 @@ namespace Tanks.Contollers
 
             foreach (var e_bullet in enemyBullets)
                 e_bullet.Render(g);
+
+            foreach (var wall in walls)
+                wall.Render(g);
 
             player.Render(g);
 
