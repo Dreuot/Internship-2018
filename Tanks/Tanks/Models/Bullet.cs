@@ -9,8 +9,9 @@ namespace Tanks.Models
 {
     class Bullet : GameObject
     {
-        public Bullet(string sprite = @"Assets/Bullet.png", int speed = 0, PointF position = default, Direction direction = Direction.None) : base(sprite, speed, position, direction)
+        public Bullet(int speed = 0, PointF position = default, Direction direction = Direction.None) : base(@"Assets/Bullet.png", speed, position, direction)
         {
+            Sprite = new Bitmap(@"Assets/Bullet.png");
         }
     }
 }

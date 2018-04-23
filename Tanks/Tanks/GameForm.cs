@@ -64,6 +64,8 @@ namespace Tanks
                         timer1.Start();
                     }
                 };
+
+                StartGame();
             };
 
             param.Show();
@@ -79,7 +81,7 @@ namespace Tanks
             g.FillRectangle(Brushes.Black, new Rectangle(0, 0, pictureBox1.Width, pictureBox1.Height));
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void StartGame()
         {
             timer1.Tick += Render;
             timer1.Interval = 1000 / 100;

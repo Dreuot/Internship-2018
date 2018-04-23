@@ -12,7 +12,7 @@ namespace Tanks.Models
         private Shooter shooter;
         private DateTime lastShoot;
 
-        public Tank(string sprite = @"Assets/tank.png", int speed = 0, PointF position = default, Direction direction = Direction.None) : base(sprite, speed, position, direction)
+        public Tank(int speed = 0, PointF position = default, Direction direction = Direction.None) : base(@"Assets/tank.png", speed, position, direction)
         {
             shooter = new Shooter();
             lastShoot = DateTime.Now;

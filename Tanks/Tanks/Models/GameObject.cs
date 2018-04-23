@@ -17,10 +17,9 @@ namespace Tanks.Models
 
 
         private Direction direction;
-        private Bitmap upDirectionSprite;
         private DateTime lastUpdate { get; set; }
 
-        public Bitmap Sprite { get; private set; }
+        public Bitmap Sprite { get; protected set; }
         public int Width => Sprite.Width;
         public int Height => Sprite.Height;
         public double Speed { get; set; }
@@ -35,7 +34,7 @@ namespace Tanks.Models
             {
                 direction = value;
                 LastTurn = DateTime.Now;
-                Sprite = RotateSprite(value);
+                RotateSprite(value);
             }
         }
 
@@ -45,16 +44,70 @@ namespace Tanks.Models
 
         public GameObject(string sprite, int speed = 0, PointF position = default, Direction direction = Direction.None)
         {
-            Sprite = new Bitmap(sprite);
-            upDirectionSprite = new Bitmap(sprite);
+            SetSprites(sprite);
+            Sprite = u_s;
             Speed = speed;
             Position = position;
             lastUpdate = DateTime.Now;
         }
 
+        public GameObject(Bitmap sprite, int speed = 0, PointF position = default, Direction direction = Direction.None)
+        {
+            SetSprites(sprite);
+            Sprite = u_s;
+            Speed = speed;
+            Position = position;
+            lastUpdate = DateTime.Now;
+        }
+
+        private void SetSprites(string sprite)
+        {
+            u_s = u_s ?? new Bitmap(sprite);
+            if (d_s == null)
+            {
+                d_s = new Bitmap(u_s);
+                d_s.RotateFlip(RotateFlipType.Rotate180FlipNone);
+            }
+
+            if (l_s == null)
+            {
+                l_s = new Bitmap(u_s);
+                l_s.RotateFlip(RotateFlipType.Rotate270FlipNone);
+            }
+
+            if (r_s == null)
+            {
+                r_s = new Bitmap(u_s);
+                r_s.RotateFlip(RotateFlipType.Rotate90FlipNone);
+            }
+        }
+
+        private void SetSprites(Bitmap image)
+        {
+            u_s = u_s ?? image;
+            if (d_s == null)
+            {
+                d_s = new Bitmap(u_s);
+                d_s.RotateFlip(RotateFlipType.Rotate180FlipNone);
+            }
+
+            if (l_s == null)
+            {
+                l_s = new Bitmap(u_s);
+                l_s.RotateFlip(RotateFlipType.Rotate270FlipNone);
+            }
+
+            if (r_s == null)
+            {
+                r_s = new Bitmap(u_s);
+                r_s.RotateFlip(RotateFlipType.Rotate90FlipNone);
+            }
+        }
+
         public void Render(Graphics g)
         {
-            g.DrawImage(Sprite, Position);
+            g.DrawImage(Sprite, Position.X, Position.Y, Width, Height);
+            //g.DrawRectangle(Pens.Pink, new Rectangle((int)Position.X, (int)Position.Y, Width, Height));
         }
 
         public bool Collides(GameObject obj)
@@ -91,27 +144,51 @@ namespace Tanks.Models
             lastUpdate = DateTime.Now;
         }
 
-        private Bitmap RotateSprite(Direction direction)
+        public void Update(TimeSpan dt)
         {
-            Bitmap newSprite = new Bitmap(upDirectionSprite);
+            PointF p = Position;
             switch (Direction)
             {
                 case Direction.Up:
+                    p.Y -= (float)Speed * dt.Milliseconds / 1000;
                     break;
                 case Direction.Down:
-                    newSprite.RotateFlip(RotateFlipType.Rotate180FlipNone);
+                    p.Y += (float)Speed * dt.Milliseconds / 1000;
                     break;
                 case Direction.Left:
-                    newSprite.RotateFlip(RotateFlipType.Rotate270FlipNone);
+                    p.X -= (float)Speed * dt.Milliseconds / 1000;
                     break;
                 case Direction.Right:
-                    newSprite.RotateFlip(RotateFlipType.Rotate90FlipNone);
+                    p.X += (float)Speed * dt.Milliseconds / 1000;
                     break;
                 default:
                     break;
             }
 
-            return newSprite;
+            Position = p;
+            lastUpdate = DateTime.Now;
+        }
+
+        private void RotateSprite(Direction direction)
+        {
+            switch (Direction)
+            {
+                case Direction.Up:
+                    Sprite = u_s;
+                    break;
+                case Direction.Down:
+                    Sprite = d_s;
+                    break;
+                case Direction.Left:
+                    Sprite = l_s;
+                    break;
+                case Direction.Right:
+                    Sprite = r_s;
+                    break;
+                default:
+                    Sprite = u_s;
+                    break;
+            }
         }
     }
 }

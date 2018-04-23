@@ -84,16 +84,30 @@ namespace Tanks.Contollers
                 apples.Add(new Apple( position: RandomPosition(new Size(30, 30))));
         }
 
+        private void AddTanks()
+        {
+            if (tanks.Count < settings.EnemyCount)
+                tanks.Add(new Tank(position: RandomPosition(new Size(50, 50)), speed: settings.Speed, direction: (Direction)r.Next(1, 4)));
+        }
+
+        private void CreateWalls()
+        {
+            Wall w = new Wall();
+            Size ws = w.Sprite.Size;
+        }
+
         public void Update()
         {
+            TimeSpan dt = DateTime.Now - lastUpdate;
             for (int i = 0; i < bullets.Count; i++)
             {
-                bullets[i].Update();
+                bullets[i].Update(dt);
                 for (int j = 0; j < tanks.Count; j++)
                 {
                     if (bullets[i].Collides(tanks[j]))
                     {
                         tanks.Remove(tanks[j]);
+                        Score += 500;
                         j--;
                         bullets.Remove(bullets[i]);
                         i--;
@@ -104,18 +118,18 @@ namespace Tanks.Contollers
 
             foreach (var b in enemyBullets)
             {
-                b.Update();
+                b.Update(dt);
                 if (b.Collides(player))
                 {
                     player.Speed = 0;
                     OnGameOver();
                 }
-            
+
             }
 
             foreach (var tank in tanks)
             {
-                tank.Update();
+                tank.Update(dt);
                 Bullet b = tank.Shoot();
                 if (b != null)
                     enemyBullets.Add(b);
@@ -123,21 +137,23 @@ namespace Tanks.Contollers
 
             for (int i = 0; i < apples.Count; i++)
             {
-                if(apples[i].Collides(player))
+                if (apples[i].Collides(player))
                 {
                     Score += 100;
                     apples.Remove(apples[i]);
                 }
             }
 
-            player?.Update();
+            player?.Update(dt);
 
             AddApple();
+            AddTanks();
 
             CheckPlayerBound();
             CheckTanksBound();
             ChangeDirecion();
             CheckBulletBound();
+            lastUpdate = DateTime.Now;
         }
 
         private void CheckPlayerBound()
@@ -235,6 +251,7 @@ namespace Tanks.Contollers
 
         public void PlayerShoot()
         {
+            if((DateTime.Now - player.LastShoot).Milliseconds > 350)
             bullets.Add(Player.Shoot());
         }
 
