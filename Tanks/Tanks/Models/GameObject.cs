@@ -110,6 +110,13 @@ namespace Tanks.Models
             //g.DrawRectangle(Pens.Pink, new Rectangle((int)Position.X, (int)Position.Y, Width, Height));
         }
 
+        public override string ToString()
+        {
+            string name = this.GetType().ToString();
+            name = name.Substring(name.LastIndexOf(".") + 1);
+            return $"{name}\tX:{Position.X}; Y:{Position.Y}";
+        }
+
         public bool Collides(GameObject obj)
         {
             return !((Position.X + Width <= obj.Position.X)

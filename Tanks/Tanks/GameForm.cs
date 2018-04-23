@@ -42,6 +42,7 @@ namespace Tanks
                 else
                 {
                     this.Close();
+                    return;
                 }
 
                 Settings sett = new Settings();
@@ -63,6 +64,14 @@ namespace Tanks
                         gc.Reset();
                         timer1.Start();
                     }
+                };
+
+                GameState gs = new GameState();
+                gs.Show();
+                this.Focus();
+                gc.OnUpdate += () =>
+                {
+                    gs.Update(gc.GameState());
                 };
 
                 StartGame();
@@ -121,6 +130,7 @@ namespace Tanks
                     break;
                 case 'r':
                 case ' ':
+                case 'к':
                     gc.PlayerShoot();
                     break;
                 default:
