@@ -154,6 +154,7 @@ namespace Tanks.Contollers
                     if (obj.Collides(tank))
                         clear = false;
                 }
+
                 foreach (var wall in walls)
                 {
                     if (obj.Collides(wall))
