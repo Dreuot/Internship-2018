@@ -9,7 +9,7 @@ namespace Tanks.Models
 {
     class Apple : GameObject
     {
-        public Apple(string sprite = @"Assets/apple.png", PointF position = default) : base(sprite, 0, position, Direction.None)
+        public Apple(PointF position = default) : base(@"Assets/apple.png", 0, position, Direction.None)
         {
         }
     }

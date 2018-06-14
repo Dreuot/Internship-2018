@@ -42,6 +42,7 @@ namespace Tanks
                 else
                 {
                     this.Close();
+                    return;
                 }
 
                 Settings sett = new Settings();
@@ -54,6 +55,26 @@ namespace Tanks
                 gc = new GameController(sett);
                 pictureBox1.Image = new Bitmap(pictureBox1.Size.Width, pictureBox1.Size.Height);
                 this.KeyPreview = true;
+                gc.OnScoreChange += (score) => this.label1.Text = score.ToString();
+                gc.OnGameOver += () =>
+                {
+                    timer1.Stop();
+                    if(MessageBox.Show("Вы проиграли!\nПовторить?", "Игра закончена", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    {
+                        gc.Reset();
+                        timer1.Start();
+                    }
+                };
+
+                GameState gs = new GameState();
+                gs.Show();
+                this.Focus();
+                gc.OnUpdate += () =>
+                {
+                    gs.Update(gc.GameState());
+                };
+
+                StartGame();
             };
 
             param.Show();
@@ -69,12 +90,11 @@ namespace Tanks
             g.FillRectangle(Brushes.Black, new Rectangle(0, 0, pictureBox1.Width, pictureBox1.Height));
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void StartGame()
         {
             timer1.Tick += Render;
             timer1.Interval = 1000 / 100;
             timer1.Start();
-            gc.OnScoreChange += (score) => this.label1.Text = score.ToString();
         }
 
         private void Render(object sender, EventArgs e)
@@ -110,6 +130,7 @@ namespace Tanks
                     break;
                 case 'r':
                 case ' ':
+                case 'к':
                     gc.PlayerShoot();
                     break;
                 default:
