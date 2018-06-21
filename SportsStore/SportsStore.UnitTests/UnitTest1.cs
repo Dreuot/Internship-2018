@@ -34,7 +34,7 @@ namespace SportsStore.UnitTests
              controller.PageSize = 3;
              // Action
 
-             ProductsListViewModel result = (ProductsListViewModel)controller.List(2).Model;
+             ProductsListViewModel result = (ProductsListViewModel)controller.List(null).Model;
              // Assert
              Product[] prodArray = result.Products.ToArray();
              Assert.IsTrue(prodArray.Length == 2);
